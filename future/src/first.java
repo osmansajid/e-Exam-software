@@ -1,29 +1,84 @@
+
+//import com.mysql.jdbc.PreparedStatement;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+
+import net.proteanit.sql.DbUtils;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
- * @author RAZ
+ * @author Sajid
  */
 public class first extends javax.swing.JFrame {
 
     /**
      * Creates new form first
      */
+    public static Timer t;
+    public static exam_dtl ex;
+    public static PreparedStatement pst=null;
+    public static int ques_num = 0,cur_marks=0;
+    public static String curIns;
+    public static String curExm;
+    public static String instr;
+    public static Connection con = null;
+    public static ResultSet rs=null;
+    public static int que_pg_num=1,min,sec;
+    public static ArrayList<pdf> pdf1 =new ArrayList<>();
+
     public first() {
         initComponents();
-        jPanel2.setVisible(false);
-        jPanel3.setVisible(false);
-        jPanel4.setVisible(false);
-        jPanel6.setVisible(false);
-        jPanel5.setVisible(false);
-        jPanel7.setVisible(false);
-        jPanel8.setVisible(false);
+        Te_log.setVisible(false);
+        set_exam.setVisible(false);
+        ExamAdd.setVisible(false);
+        set_que.setVisible(false);
+        Mark_sheet.setVisible(false);
+        exam_strt.setVisible(false);
+        exam_page.setVisible(false);
+        te_reg.setVisible(false);
+        exam_finished.setVisible(false);
+        st_name.setText("");
+        st_roll.setText("");
+        Ex_nm.setText("");
     }
 
+    public Connection getconnection1() {
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost/sazid", "root", "");
+            //JOptionPane.showMessageDialog(null, "connected");
+
+            return con;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(first.class.getName()).log(Level.SEVERE, null, ex);
+            //JOptionPane.showMessageDialog(null, "not connected");
+            return null;
+
+        }
+    }
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,19 +88,13 @@ public class first extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel6 = new javax.swing.JPanel();
+        set_que = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jRadioButton5 = new javax.swing.JRadioButton();
-        jRadioButton6 = new javax.swing.JRadioButton();
-        jRadioButton7 = new javax.swing.JRadioButton();
-        jRadioButton8 = new javax.swing.JRadioButton();
-        jLabel11 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
+        frst = new javax.swing.JTextField();
+        scnd = new javax.swing.JTextField();
+        thrd = new javax.swing.JTextField();
+        frth = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -53,559 +102,486 @@ public class first extends javax.swing.JFrame {
         jButton10 = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jLabel28 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        Ques_name = new javax.swing.JTextArea();
+        Cor = new javax.swing.JTextField();
+        que_num = new javax.swing.JTextField();
+        jSeparator21 = new javax.swing.JSeparator();
+        jSeparator22 = new javax.swing.JSeparator();
+        Stdnt_sub = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        Ex_nm = new javax.swing.JTextField();
+        st_roll = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        Submit_button = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        st_name = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        jSeparator23 = new javax.swing.JSeparator();
+        Te_log = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jTextField3 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        log_pass = new javax.swing.JPasswordField();
+        log_name = new javax.swing.JTextField();
+        lgin_btn = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jLabel27 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
+        jButton13 = new javax.swing.JButton();
+        jSeparator20 = new javax.swing.JSeparator();
+        set_exam = new javax.swing.JPanel();
         jButton5 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jTextField10 = new javax.swing.JTextField();
-        jTextField12 = new javax.swing.JTextField();
-        jTextField13 = new javax.swing.JTextField();
+        search_exam = new javax.swing.JTextField();
         jButton12 = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
-        jButton14 = new javax.swing.JButton();
-        jButton15 = new javax.swing.JButton();
-        jButton16 = new javax.swing.JButton();
-        jTextField4 = new javax.swing.JTextField();
-        jButton17 = new javax.swing.JButton();
-        jButton18 = new javax.swing.JButton();
-        jButton19 = new javax.swing.JButton();
-        jButton20 = new javax.swing.JButton();
-        jButton21 = new javax.swing.JButton();
-        jButton22 = new javax.swing.JButton();
-        jButton23 = new javax.swing.JButton();
-        jButton24 = new javax.swing.JButton();
-        jButton25 = new javax.swing.JButton();
-        jButton26 = new javax.swing.JButton();
-        jButton27 = new javax.swing.JButton();
-        jButton28 = new javax.swing.JButton();
-        jButton29 = new javax.swing.JButton();
-        jButton30 = new javax.swing.JButton();
-        jButton31 = new javax.swing.JButton();
         jLabel26 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        exam_table = new javax.swing.JTable();
+        jSeparator18 = new javax.swing.JSeparator();
+        jSeparator19 = new javax.swing.JSeparator();
+        ExamAdd = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        Ins = new javax.swing.JTextArea();
         jLabel8 = new javax.swing.JLabel();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
-        jLabel25 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
+        Exam_name = new javax.swing.JTextField();
+        marks = new javax.swing.JTextField();
+        Time = new javax.swing.JLabel();
+        time = new javax.swing.JTextField();
+        Time1 = new javax.swing.JLabel();
+        jSeparator14 = new javax.swing.JSeparator();
+        jSeparator15 = new javax.swing.JSeparator();
+        jSeparator16 = new javax.swing.JSeparator();
+        jSeparator17 = new javax.swing.JSeparator();
+        Mark_sheet = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
-        jTextField14 = new javax.swing.JTextField();
-        jTextField15 = new javax.swing.JTextField();
         jButton34 = new javax.swing.JButton();
-        jPanel7 = new javax.swing.JPanel();
-        jTextField16 = new javax.swing.JTextField();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        marks_table = new javax.swing.JTable();
+        jSeparator13 = new javax.swing.JSeparator();
+        exam_strt = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jButton32 = new javax.swing.JButton();
-        jTextField17 = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
-        jTextField18 = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
-        jPanel8 = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jSeparator4 = new javax.swing.JSeparator();
+        E_NAM = new javax.swing.JLabel();
+        t_time = new javax.swing.JLabel();
+        t_marks = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea4 = new javax.swing.JTextArea();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
-        jButton33 = new javax.swing.JButton();
-        jLabel21 = new javax.swing.JLabel();
-        jTextField19 = new javax.swing.JTextField();
+        Instr_area = new javax.swing.JTextArea();
+        exam_page = new javax.swing.JPanel();
+        op1_radio = new javax.swing.JRadioButton();
+        op2_radio = new javax.swing.JRadioButton();
+        op3_radio = new javax.swing.JRadioButton();
+        op4_radio = new javax.swing.JRadioButton();
+        Next_button = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        Timer_ = new javax.swing.JLabel();
+        que_num_ex_pg = new javax.swing.JLabel();
+        jSeparator5 = new javax.swing.JSeparator();
+        jSeparator6 = new javax.swing.JSeparator();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        ex_pg_ques = new javax.swing.JTextArea();
+        te_reg = new javax.swing.JPanel();
+        tec_pass = new javax.swing.JTextField();
+        tec_name = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jButton15 = new javax.swing.JButton();
+        jLabel29 = new javax.swing.JLabel();
+        jButton14 = new javax.swing.JButton();
+        jSeparator10 = new javax.swing.JSeparator();
+        jSeparator11 = new javax.swing.JSeparator();
+        jSeparator12 = new javax.swing.JSeparator();
+        exam_finished = new javax.swing.JPanel();
+        pdf_button = new javax.swing.JButton();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        ob_marks = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        total_marks = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jSeparator7 = new javax.swing.JSeparator();
+        jSeparator8 = new javax.swing.JSeparator();
+        jSeparator9 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel6.setPreferredSize(new java.awt.Dimension(500, 500));
-        jPanel6.setLayout(null);
+        set_que.setBackground(new java.awt.Color(0, 102, 153));
+        set_que.setForeground(new java.awt.Color(255, 255, 255));
+        set_que.setMinimumSize(new java.awt.Dimension(500, 500));
+        set_que.setPreferredSize(new java.awt.Dimension(500, 500));
+        set_que.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel9.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Setup Question");
-        jPanel6.add(jLabel9);
-        jLabel9.setBounds(10, 11, 88, 27);
+        set_que.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 140, 27));
 
+        jLabel10.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Correct Ans:");
-        jPanel6.add(jLabel10);
-        jLabel10.setBounds(317, 190, 153, 31);
+        set_que.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 70, 153, 31));
 
-        jRadioButton5.setText("D");
-        jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
+        frst.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton5ActionPerformed(evt);
+                frstActionPerformed(evt);
             }
         });
-        jPanel6.add(jRadioButton5);
-        jRadioButton5.setBounds(317, 306, 33, 23);
+        set_que.add(frst, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 227, 117, -1));
+        set_que.add(scnd, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 279, 117, -1));
 
-        jRadioButton6.setText("A");
-        jRadioButton6.addActionListener(new java.awt.event.ActionListener() {
+        thrd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton6ActionPerformed(evt);
+                thrdActionPerformed(evt);
             }
         });
-        jPanel6.add(jRadioButton6);
-        jRadioButton6.setBounds(317, 226, 33, 23);
+        set_que.add(thrd, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 337, 117, -1));
+        set_que.add(frth, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 387, 117, -1));
 
-        jRadioButton7.setSelected(true);
-        jRadioButton7.setText("C");
-        jRadioButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton7ActionPerformed(evt);
-            }
-        });
-        jPanel6.add(jRadioButton7);
-        jRadioButton7.setBounds(317, 278, 33, 23);
-
-        jRadioButton8.setText("B");
-        jRadioButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton8ActionPerformed(evt);
-            }
-        });
-        jPanel6.add(jRadioButton8);
-        jRadioButton8.setBounds(317, 254, 31, 23);
-
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel11.setText("Set Marks:");
-        jPanel6.add(jLabel11);
-        jLabel11.setBounds(317, 94, 133, 23);
-        jPanel6.add(jTextField5);
-        jTextField5.setBounds(317, 128, 52, 20);
-        jPanel6.add(jTextField6);
-        jTextField6.setBounds(40, 227, 117, 20);
-        jPanel6.add(jTextField7);
-        jTextField7.setBounds(40, 279, 117, 20);
-        jPanel6.add(jTextField8);
-        jTextField8.setBounds(40, 337, 117, 20);
-        jPanel6.add(jTextField9);
-        jTextField9.setBounds(40, 387, 117, 20);
-
+        jLabel12.setBackground(new java.awt.Color(0, 102, 153));
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("a.");
-        jPanel6.add(jLabel12);
-        jLabel12.setBounds(12, 230, 10, 14);
+        set_que.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 230, -1, -1));
 
+        jLabel13.setBackground(new java.awt.Color(0, 102, 153));
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("c.");
-        jPanel6.add(jLabel13);
-        jLabel13.setBounds(10, 340, 20, 14);
+        set_que.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 20, -1));
 
+        jLabel14.setBackground(new java.awt.Color(0, 102, 153));
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setText("d.");
-        jPanel6.add(jLabel14);
-        jLabel14.setBounds(10, 390, 10, 14);
+        set_que.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, -1, -1));
 
+        jLabel15.setBackground(new java.awt.Color(0, 102, 153));
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setText("b.");
-        jPanel6.add(jLabel15);
-        jLabel15.setBounds(10, 282, 10, 14);
+        set_que.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 282, -1, -1));
 
+        jButton10.setBackground(new java.awt.Color(0, 102, 153));
+        jButton10.setForeground(new java.awt.Color(255, 255, 255));
         jButton10.setText("Set Next Question");
-        jPanel6.add(jButton10);
-        jButton10.setBounds(10, 454, 147, 23);
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+        set_que.add(jButton10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 447, 147, 30));
 
+        jButton11.setBackground(new java.awt.Color(0, 102, 153));
+        jButton11.setForeground(new java.awt.Color(255, 255, 255));
         jButton11.setText("Done");
         jButton11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton11ActionPerformed(evt);
             }
         });
-        jPanel6.add(jButton11);
-        jButton11.setBounds(326, 454, 153, 23);
+        set_que.add(jButton11, new org.netbeans.lib.awtextra.AbsoluteConstraints(326, 447, 153, 30));
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jTextArea2.setText("1.Question?");
-        jScrollPane2.setViewportView(jTextArea2);
+        Ques_name.setColumns(20);
+        Ques_name.setRows(5);
+        Ques_name.setText("Question?");
+        jScrollPane2.setViewportView(Ques_name);
 
-        jPanel6.add(jScrollPane2);
-        jScrollPane2.setBounds(10, 86, 244, 96);
+        set_que.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 86, 244, -1));
+        set_que.add(Cor, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 120, 70, -1));
 
-        jLabel28.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aid696296-v4-728px-Prepare-for-an-Exam-Step-11.jpg"))); // NOI18N
-        jLabel28.setAlignmentX(0.5F);
-        jLabel28.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        jLabel28.setMinimumSize(new java.awt.Dimension(500, 500));
-        jLabel28.setPreferredSize(new java.awt.Dimension(500, 500));
-        jPanel6.add(jLabel28);
-        jLabel28.setBounds(0, 0, 500, 500);
-
-        jPanel1.setMinimumSize(new java.awt.Dimension(500, 500));
-        jPanel1.setPreferredSize(new java.awt.Dimension(500, 500));
-        jPanel1.setLayout(null);
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("EXAM TITLE");
-        jPanel1.add(jLabel1);
-        jLabel1.setBounds(154, 65, 177, 64);
-        jPanel1.add(jTextField1);
-        jTextField1.setBounds(232, 194, 170, 45);
-        jPanel1.add(jTextField2);
-        jTextField2.setBounds(232, 282, 170, 40);
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("NAME");
-        jPanel1.add(jLabel2);
-        jLabel2.setBounds(102, 192, 89, 45);
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel3.setText("ROLL");
-        jPanel1.add(jLabel3);
-        jLabel3.setBounds(102, 280, 89, 40);
-
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton1.setText("SUBMIT");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        que_num.setText("1.");
+        que_num.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                que_numActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1);
-        jButton1.setBounds(232, 381, 94, 35);
+        set_que.add(que_num, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 40, -1));
+        set_que.add(jSeparator21, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 102, 100, 30));
+        set_que.add(jSeparator22, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 120, 20));
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        Stdnt_sub.setBackground(new java.awt.Color(0, 102, 153));
+        Stdnt_sub.setForeground(new java.awt.Color(255, 255, 255));
+        Stdnt_sub.setMinimumSize(new java.awt.Dimension(500, 500));
+        Stdnt_sub.setPreferredSize(new java.awt.Dimension(500, 500));
+        Stdnt_sub.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("ONLINE EXAM");
+        Stdnt_sub.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(154, 65, 177, 64));
+        Stdnt_sub.add(Ex_nm, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 340, 170, 45));
+        Stdnt_sub.add(st_roll, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 270, 170, 40));
+
+        jLabel2.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("NAME");
+        Stdnt_sub.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(102, 192, 89, 45));
+
+        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("EXAM NAME");
+        Stdnt_sub.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 340, 89, 40));
+
+        Submit_button.setBackground(new java.awt.Color(0, 102, 153));
+        Submit_button.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        Submit_button.setForeground(new java.awt.Color(255, 255, 255));
+        Submit_button.setText("SUBMIT");
+        Submit_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Submit_buttonActionPerformed(evt);
+            }
+        });
+        Stdnt_sub.add(Submit_button, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 430, 94, 35));
+
+        jButton2.setBackground(new java.awt.Color(0, 102, 153));
+        jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("LOGIN");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2);
-        jButton2.setBounds(410, 20, 77, 32);
+        Stdnt_sub.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 20, 77, 32));
+        Stdnt_sub.add(st_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(232, 194, 170, 45));
 
-        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aid696296-v4-728px-Prepare-for-an-Exam-Step-11.jpg"))); // NOI18N
-        jLabel22.setAlignmentX(0.5F);
-        jLabel22.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        jLabel22.setMinimumSize(new java.awt.Dimension(500, 500));
-        jLabel22.setPreferredSize(new java.awt.Dimension(500, 500));
-        jPanel1.add(jLabel22);
-        jLabel22.setBounds(-70, 0, 580, 500);
+        jLabel22.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel22.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel22.setText("ROLL");
+        Stdnt_sub.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 270, 89, 40));
+        Stdnt_sub.add(jSeparator23, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 120, 140, 20));
 
-        jPanel2.setMinimumSize(new java.awt.Dimension(500, 500));
-        jPanel2.setPreferredSize(new java.awt.Dimension(500, 500));
-        jPanel2.setLayout(null);
+        Te_log.setBackground(new java.awt.Color(0, 102, 153));
+        Te_log.setForeground(new java.awt.Color(255, 255, 255));
+        Te_log.setMinimumSize(new java.awt.Dimension(500, 500));
+        Te_log.setPreferredSize(new java.awt.Dimension(500, 500));
+        Te_log.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel4.setBackground(new java.awt.Color(0, 102, 153));
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("TEACHER LOGIN");
-        jPanel2.add(jLabel4);
-        jLabel4.setBounds(164, 58, 194, 97);
+        Te_log.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(164, 58, 194, 97));
 
+        jLabel5.setBackground(new java.awt.Color(0, 102, 153));
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Password");
-        jPanel2.add(jLabel5);
-        jLabel5.setBounds(61, 286, 77, 27);
+        Te_log.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 286, 77, 27));
 
+        jLabel6.setBackground(new java.awt.Color(0, 102, 153));
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Username");
         jLabel6.setToolTipText("");
-        jPanel2.add(jLabel6);
-        jLabel6.setBounds(61, 221, 77, 27);
-        jPanel2.add(jPasswordField1);
-        jPasswordField1.setBounds(142, 286, 250, 27);
-        jPanel2.add(jTextField3);
-        jTextField3.setBounds(142, 223, 250, 27);
+        Te_log.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(61, 221, 77, 27));
+        Te_log.add(log_pass, new org.netbeans.lib.awtextra.AbsoluteConstraints(142, 286, 250, 27));
+        Te_log.add(log_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(142, 223, 250, 27));
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton3.setText("LOG IN");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        lgin_btn.setBackground(new java.awt.Color(0, 102, 153));
+        lgin_btn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lgin_btn.setForeground(new java.awt.Color(255, 255, 255));
+        lgin_btn.setText("LOG IN");
+        lgin_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                lgin_btnActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton3);
-        jButton3.setBounds(209, 374, 94, 35);
+        Te_log.add(lgin_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(209, 374, 94, 35));
 
-        jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton4.setBackground(new java.awt.Color(0, 102, 153));
+        jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(255, 255, 255));
         jButton4.setText("Back");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton4);
-        jButton4.setBounds(10, 11, 80, 36);
+        Te_log.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 80, 36));
 
-        jLabel27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aid8503-728px-Study-Step-2-Version-2.jpg"))); // NOI18N
-        jLabel27.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        jLabel27.setMinimumSize(new java.awt.Dimension(500, 500));
-        jPanel2.add(jLabel27);
-        jLabel27.setBounds(0, 0, 520, 510);
+        jButton13.setBackground(new java.awt.Color(0, 102, 153));
+        jButton13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton13.setForeground(new java.awt.Color(255, 255, 255));
+        jButton13.setText("Register");
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+        Te_log.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, 110, 40));
+        Te_log.add(jSeparator20, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 130, 170, 20));
 
-        jPanel3.setMinimumSize(new java.awt.Dimension(500, 500));
-        jPanel3.setLayout(null);
+        set_exam.setBackground(new java.awt.Color(0, 102, 153));
+        set_exam.setForeground(new java.awt.Color(255, 255, 255));
+        set_exam.setMinimumSize(new java.awt.Dimension(500, 500));
+        set_exam.setPreferredSize(new java.awt.Dimension(500, 500));
+        set_exam.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton5.setBackground(new java.awt.Color(0, 102, 153));
+        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(255, 255, 255));
         jButton5.setText("Log Out");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
-        jPanel3.add(jButton5);
-        jButton5.setBounds(390, 10, 103, 34);
+        set_exam.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, 103, 34));
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel7.setText("Question Setup");
-        jPanel3.add(jLabel7);
-        jLabel7.setBounds(222, 19, 205, 17);
+        set_exam.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, 150, 30));
 
+        jButton6.setBackground(new java.awt.Color(0, 102, 153));
         jButton6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton6.setText("Add New Exam");
+        jButton6.setForeground(new java.awt.Color(255, 255, 255));
+        jButton6.setText("Add Exam");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
             }
         });
-        jPanel3.add(jButton6);
-        jButton6.setBounds(10, 121, 150, 40);
+        set_exam.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, 140, 30));
+        set_exam.add(search_exam, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 160, 180, 30));
 
-        jButton9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton9.setText("Back");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton9);
-        jButton9.setBounds(10, 11, 91, 34);
-
-        jTextField10.setText("Exam_Name");
-        jPanel3.add(jTextField10);
-        jTextField10.setBounds(10, 211, 117, 30);
-
-        jTextField12.setText("Exam_Name");
-        jPanel3.add(jTextField12);
-        jTextField12.setBounds(10, 345, 114, 30);
-
-        jTextField13.setText("jTextField10");
-        jPanel3.add(jTextField13);
-        jTextField13.setBounds(10, 414, 114, 30);
-
+        jButton12.setBackground(new java.awt.Color(0, 102, 153));
+        jButton12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton12.setForeground(new java.awt.Color(255, 255, 255));
         jButton12.setText("Marks");
         jButton12.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton12ActionPerformed(evt);
             }
         });
-        jPanel3.add(jButton12);
-        jButton12.setBounds(211, 211, 68, 30);
+        set_exam.add(jButton12, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 210, 120, 30));
 
-        jButton13.setText("Enable");
-        jPanel3.add(jButton13);
-        jButton13.setBounds(289, 211, 65, 30);
+        jLabel26.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel26.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel26.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel26.setText("Exam Name");
+        set_exam.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 110, 160, 30));
 
-        jButton14.setText("Edit");
-        jButton14.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton14ActionPerformed(evt);
+        exam_table.setBackground(new java.awt.Color(0, 102, 153));
+        exam_table.setForeground(new java.awt.Color(255, 255, 255));
+        exam_table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Exam Name", "Questions", "Time"
             }
-        });
-        jPanel3.add(jButton14);
-        jButton14.setBounds(133, 211, 68, 30);
+        ));
+        jScrollPane6.setViewportView(exam_table);
 
-        jButton15.setText("Delete");
-        jPanel3.add(jButton15);
-        jButton15.setBounds(433, 211, 63, 30);
+        set_exam.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 460, 170));
+        set_exam.add(jSeparator18, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, 160, 20));
+        set_exam.add(jSeparator19, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 140, 120, 10));
 
-        jButton16.setText("Disable");
-        jPanel3.add(jButton16);
-        jButton16.setBounds(360, 211, 67, 30);
+        ExamAdd.setBackground(new java.awt.Color(0, 102, 153));
+        ExamAdd.setMinimumSize(new java.awt.Dimension(500, 500));
+        ExamAdd.setPreferredSize(new java.awt.Dimension(500, 500));
+        ExamAdd.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextField4.setText("Exam_Name");
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jTextField4);
-        jTextField4.setBounds(10, 279, 114, 30);
+        Ins.setColumns(20);
+        Ins.setRows(5);
+        jScrollPane1.setViewportView(Ins);
 
-        jButton17.setText("Marks");
-        jButton17.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton17ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton17);
-        jButton17.setBounds(212, 279, 68, 30);
+        ExamAdd.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 200, 370, 110));
 
-        jButton18.setText("Enable");
-        jPanel3.add(jButton18);
-        jButton18.setBounds(290, 279, 65, 30);
-
-        jButton19.setText("Edit");
-        jButton19.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton19ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton19);
-        jButton19.setBounds(134, 279, 68, 30);
-
-        jButton20.setText("Delete");
-        jPanel3.add(jButton20);
-        jButton20.setBounds(434, 279, 63, 30);
-
-        jButton21.setText("Disable");
-        jPanel3.add(jButton21);
-        jButton21.setBounds(361, 279, 67, 30);
-
-        jButton22.setText("Marks");
-        jButton22.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton22ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton22);
-        jButton22.setBounds(212, 345, 68, 30);
-
-        jButton23.setText("Enable");
-        jPanel3.add(jButton23);
-        jButton23.setBounds(290, 345, 65, 30);
-
-        jButton24.setText("Edit");
-        jButton24.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton24ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton24);
-        jButton24.setBounds(134, 345, 68, 30);
-
-        jButton25.setText("Delete");
-        jPanel3.add(jButton25);
-        jButton25.setBounds(434, 345, 63, 30);
-
-        jButton26.setText("Disable");
-        jPanel3.add(jButton26);
-        jButton26.setBounds(361, 345, 67, 30);
-
-        jButton27.setText("Marks");
-        jButton27.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton27ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton27);
-        jButton27.setBounds(212, 414, 68, 30);
-
-        jButton28.setText("Enable");
-        jPanel3.add(jButton28);
-        jButton28.setBounds(290, 414, 65, 30);
-
-        jButton29.setText("Edit");
-        jButton29.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton29ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton29);
-        jButton29.setBounds(134, 414, 68, 30);
-
-        jButton30.setText("Delete");
-        jPanel3.add(jButton30);
-        jButton30.setBounds(434, 414, 63, 30);
-
-        jButton31.setText("Disable");
-        jPanel3.add(jButton31);
-        jButton31.setBounds(361, 414, 67, 30);
-
-        jLabel26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aid1631851-v4-728px-Study-for-an-English-Exam-Step-9-Version-3.jpg"))); // NOI18N
-        jLabel26.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        jLabel26.setMinimumSize(new java.awt.Dimension(500, 500));
-        jLabel26.setPreferredSize(new java.awt.Dimension(500, 500));
-        jPanel3.add(jLabel26);
-        jLabel26.setBounds(0, 0, 500, 500);
-
-        jPanel4.setMinimumSize(new java.awt.Dimension(500, 500));
-        jPanel4.setPreferredSize(new java.awt.Dimension(500, 500));
-        jPanel4.setLayout(null);
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        jPanel4.add(jScrollPane1);
-        jScrollPane1.setBounds(73, 215, 362, 201);
-
+        jLabel8.setBackground(new java.awt.Color(0, 102, 153));
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Exam Name");
-        jPanel4.add(jLabel8);
-        jLabel8.setBounds(152, 11, 167, 46);
+        ExamAdd.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(152, 11, 167, 46));
 
+        jButton7.setBackground(new java.awt.Color(0, 102, 153));
         jButton7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton7.setForeground(new java.awt.Color(255, 255, 255));
         jButton7.setText("Add Questions");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
             }
         });
-        jPanel4.add(jButton7);
-        jButton7.setBounds(189, 451, 133, 38);
+        ExamAdd.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 430, -1, 38));
 
+        jButton8.setBackground(new java.awt.Color(0, 102, 153));
         jButton8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton8.setForeground(new java.awt.Color(255, 255, 255));
         jButton8.setText("Back");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
             }
         });
-        jPanel4.add(jButton8);
-        jButton8.setBounds(10, 10, 78, 33);
+        ExamAdd.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 78, 33));
 
+        jLabel16.setBackground(new java.awt.Color(0, 102, 153));
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel16.setText("Instructions");
-        jPanel4.add(jLabel16);
-        jLabel16.setBounds(160, 170, 167, 46);
-        jPanel4.add(jTextField11);
-        jTextField11.setBounds(152, 84, 176, 41);
+        ExamAdd.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 167, 46));
+        ExamAdd.add(Exam_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(152, 84, 176, 41));
+        ExamAdd.add(marks, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 370, 130, 40));
 
-        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aid1631851-v4-728px-Study-for-an-English-Exam-Step-11-Version-3.jpg"))); // NOI18N
-        jLabel25.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        jLabel25.setMinimumSize(new java.awt.Dimension(500, 500));
-        jPanel4.add(jLabel25);
-        jLabel25.setBounds(-10, -10, 540, 520);
+        Time.setBackground(new java.awt.Color(0, 102, 153));
+        Time.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        Time.setForeground(new java.awt.Color(255, 255, 255));
+        Time.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Time.setText("Marks:");
+        ExamAdd.add(Time, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, 70, 30));
+        ExamAdd.add(time, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 370, 130, 40));
 
-        jPanel5.setPreferredSize(new java.awt.Dimension(500, 500));
+        Time1.setBackground(new java.awt.Color(0, 102, 153));
+        Time1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        Time1.setForeground(new java.awt.Color(255, 255, 255));
+        Time1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Time1.setText("Time(s):");
+        ExamAdd.add(Time1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 320, 100, 40));
+        ExamAdd.add(jSeparator14, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, 120, -1));
+        ExamAdd.add(jSeparator15, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 130, -1));
+        ExamAdd.add(jSeparator16, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 360, 90, 10));
+        ExamAdd.add(jSeparator17, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 360, 90, 10));
 
+        Mark_sheet.setBackground(new java.awt.Color(0, 102, 153));
+        Mark_sheet.setForeground(new java.awt.Color(255, 255, 255));
+        Mark_sheet.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
+        Mark_sheet.setPreferredSize(new java.awt.Dimension(500, 500));
+
+        jLabel17.setBackground(new java.awt.Color(0, 102, 153));
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel17.setText("Mark Sheet");
 
-        jTextField14.setText("Total Marks");
-
-        jTextField15.setText("Exam Name");
-
-        jButton34.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButton34.setBackground(new java.awt.Color(0, 153, 204));
+        jButton34.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton34.setForeground(new java.awt.Color(255, 255, 255));
         jButton34.setText("Back");
         jButton34.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -613,223 +589,533 @@ public class first extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(158, 158, 158)
-                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(202, 202, 202)
-                        .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(10, 10, 10))
+        marks_table.setBackground(new java.awt.Color(0, 102, 153));
+        marks_table.setForeground(new java.awt.Color(255, 255, 255));
+        marks_table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "NAME", "ROLL", "MARKS", "RANK"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane5.setViewportView(marks_table);
+
+        javax.swing.GroupLayout Mark_sheetLayout = new javax.swing.GroupLayout(Mark_sheet);
+        Mark_sheet.setLayout(Mark_sheetLayout);
+        Mark_sheetLayout.setHorizontalGroup(
+            Mark_sheetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Mark_sheetLayout.createSequentialGroup()
+                .addGap(0, 28, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
+            .addGroup(Mark_sheetLayout.createSequentialGroup()
+                .addGroup(Mark_sheetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(Mark_sheetLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton34, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(61, 61, 61)
+                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(Mark_sheetLayout.createSequentialGroup()
+                        .addGap(187, 187, 187)
+                        .addComponent(jSeparator13, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        Mark_sheetLayout.setVerticalGroup(
+            Mark_sheetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Mark_sheetLayout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(Mark_sheetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton34, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator13, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel7.setMinimumSize(new java.awt.Dimension(500, 500));
-        jPanel7.setPreferredSize(new java.awt.Dimension(500, 500));
-        jPanel7.setLayout(null);
+        exam_strt.setBackground(new java.awt.Color(0, 102, 153));
+        exam_strt.setMinimumSize(new java.awt.Dimension(500, 500));
+        exam_strt.setPreferredSize(new java.awt.Dimension(500, 500));
+        exam_strt.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextField16.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jPanel7.add(jTextField16);
-        jTextField16.setBounds(134, 22, 228, 44);
-
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jScrollPane3.setViewportView(jTextArea3);
-
-        jPanel7.add(jScrollPane3);
-        jScrollPane3.setBounds(37, 133, 430, 250);
-
+        jLabel18.setBackground(new java.awt.Color(0, 102, 204));
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setText("Instructions:");
-        jPanel7.add(jLabel18);
-        jLabel18.setBounds(37, 84, 171, 43);
+        exam_strt.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 84, 171, 43));
 
+        jButton32.setBackground(new java.awt.Color(0, 153, 204));
         jButton32.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton32.setForeground(new java.awt.Color(255, 255, 255));
         jButton32.setText("Start");
         jButton32.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton32ActionPerformed(evt);
             }
         });
-        jPanel7.add(jButton32);
-        jButton32.setBounds(186, 429, 129, 31);
-        jPanel7.add(jTextField17);
-        jTextField17.setBounds(355, 431, 112, 31);
+        exam_strt.add(jButton32, new org.netbeans.lib.awtextra.AbsoluteConstraints(186, 429, 129, 31));
 
+        jLabel19.setBackground(new java.awt.Color(0, 102, 204));
+        jLabel19.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
         jLabel19.setText("Total Time");
-        jPanel7.add(jLabel19);
-        jLabel19.setBounds(37, 401, 102, 14);
-        jPanel7.add(jTextField18);
-        jTextField18.setBounds(37, 431, 112, 31);
+        exam_strt.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 401, 102, -1));
 
+        jLabel20.setBackground(new java.awt.Color(0, 102, 204));
+        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
         jLabel20.setText("Total Marks");
-        jPanel7.add(jLabel20);
-        jLabel20.setBounds(355, 401, 102, 14);
+        exam_strt.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(355, 401, 102, -1));
 
-        jLabel24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aid1631851-v4-728px-Study-for-an-English-Exam-Step-11-Version-3.jpg"))); // NOI18N
-        jLabel24.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        jLabel24.setMinimumSize(new java.awt.Dimension(500, 500));
-        jPanel7.add(jLabel24);
-        jLabel24.setBounds(-22, 0, 750, 546);
+        jSeparator1.setForeground(new java.awt.Color(255, 255, 255));
+        exam_strt.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 420, 90, 20));
 
-        jPanel8.setMinimumSize(new java.awt.Dimension(500, 500));
-        jPanel8.setLayout(null);
+        jSeparator3.setForeground(new java.awt.Color(255, 255, 255));
+        exam_strt.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, 90, 20));
 
-        jTextArea4.setColumns(20);
-        jTextArea4.setRows(5);
-        jScrollPane4.setViewportView(jTextArea4);
+        jSeparator2.setForeground(new java.awt.Color(255, 255, 255));
+        exam_strt.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 100, 30));
 
-        jPanel8.add(jScrollPane4);
-        jScrollPane4.setBounds(10, 54, 289, 96);
+        jSeparator4.setForeground(new java.awt.Color(255, 255, 255));
+        exam_strt.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 62, 260, 20));
 
-        jRadioButton1.setForeground(new java.awt.Color(255, 51, 0));
-        jRadioButton1.setText("option1");
-        jPanel8.add(jRadioButton1);
-        jRadioButton1.setBounds(10, 191, 138, 23);
+        E_NAM.setBackground(new java.awt.Color(0, 102, 204));
+        E_NAM.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        E_NAM.setForeground(new java.awt.Color(255, 255, 255));
+        E_NAM.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        exam_strt.add(E_NAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 260, 40));
 
-        jRadioButton2.setForeground(new java.awt.Color(255, 0, 0));
-        jRadioButton2.setText("option2");
-        jPanel8.add(jRadioButton2);
-        jRadioButton2.setBounds(10, 249, 138, 23);
+        t_time.setBackground(new java.awt.Color(0, 102, 153));
+        t_time.setForeground(new java.awt.Color(255, 255, 255));
+        t_time.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        exam_strt.add(t_time, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, 100, 30));
 
-        jRadioButton3.setForeground(new java.awt.Color(255, 0, 0));
-        jRadioButton3.setText("option3");
-        jPanel8.add(jRadioButton3);
-        jRadioButton3.setBounds(10, 310, 138, 23);
+        t_marks.setBackground(new java.awt.Color(0, 102, 204));
+        t_marks.setForeground(new java.awt.Color(255, 255, 255));
+        t_marks.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        exam_strt.add(t_marks, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 440, 100, 30));
 
-        jRadioButton4.setForeground(new java.awt.Color(255, 0, 0));
-        jRadioButton4.setText("option4");
-        jRadioButton4.setActionCommand("option4");
-        jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
+        Instr_area.setEditable(false);
+        Instr_area.setBackground(new java.awt.Color(0, 102, 153));
+        Instr_area.setColumns(20);
+        Instr_area.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Instr_area.setForeground(new java.awt.Color(255, 255, 255));
+        Instr_area.setRows(5);
+        jScrollPane4.setViewportView(Instr_area);
+
+        exam_strt.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 440, 240));
+
+        exam_page.setBackground(new java.awt.Color(0, 102, 153));
+        exam_page.setMinimumSize(new java.awt.Dimension(500, 500));
+        exam_page.setPreferredSize(new java.awt.Dimension(500, 500));
+        exam_page.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        op1_radio.setBackground(new java.awt.Color(0, 102, 153));
+        op1_radio.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        op1_radio.setForeground(new java.awt.Color(255, 255, 255));
+        exam_page.add(op1_radio, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 191, 190, 30));
+
+        op2_radio.setBackground(new java.awt.Color(0, 102, 153));
+        op2_radio.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        op2_radio.setForeground(new java.awt.Color(255, 255, 255));
+        exam_page.add(op2_radio, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, 190, 30));
+
+        op3_radio.setBackground(new java.awt.Color(0, 102, 153));
+        op3_radio.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        op3_radio.setForeground(new java.awt.Color(255, 255, 255));
+        op3_radio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton4ActionPerformed(evt);
+                op3_radioActionPerformed(evt);
             }
         });
-        jPanel8.add(jRadioButton4);
-        jRadioButton4.setBounds(10, 370, 138, 23);
+        exam_page.add(op3_radio, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, 190, 30));
 
-        jButton33.setBackground(new java.awt.Color(0, 204, 102));
-        jButton33.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton33.setText("Next");
-        jPanel8.add(jButton33);
-        jButton33.setBounds(190, 447, 109, 23);
+        op4_radio.setBackground(new java.awt.Color(0, 102, 153));
+        op4_radio.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        op4_radio.setForeground(new java.awt.Color(255, 255, 255));
+        op4_radio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                op4_radioActionPerformed(evt);
+            }
+        });
+        exam_page.add(op4_radio, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 190, 30));
 
-        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel21.setText("Marks:");
-        jPanel8.add(jLabel21);
-        jLabel21.setBounds(380, 50, 112, 26);
+        Next_button.setBackground(new java.awt.Color(0, 102, 153));
+        Next_button.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        Next_button.setForeground(new java.awt.Color(255, 255, 255));
+        Next_button.setText("Next");
+        Next_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Next_buttonActionPerformed(evt);
+            }
+        });
+        exam_page.add(Next_button, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 430, 150, 40));
 
-        jTextField19.setText("   ");
-        jPanel8.add(jTextField19);
-        jTextField19.setBounds(380, 80, 42, 20);
+        jLabel11.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("Time Remaining:");
+        exam_page.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 20, 120, 30));
 
-        jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aid696296-v4-728px-Prepare-for-an-Exam-Step-11.jpg"))); // NOI18N
-        jLabel23.setAlignmentX(0.5F);
-        jLabel23.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        jLabel23.setMinimumSize(new java.awt.Dimension(500, 500));
-        jLabel23.setPreferredSize(new java.awt.Dimension(500, 500));
-        jPanel8.add(jLabel23);
-        jLabel23.setBounds(-50, 0, 550, 500);
+        Timer_.setBackground(new java.awt.Color(0, 102, 153));
+        Timer_.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Timer_.setForeground(new java.awt.Color(255, 255, 255));
+        Timer_.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        exam_page.add(Timer_, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, 110, 30));
+
+        que_num_ex_pg.setBackground(new java.awt.Color(0, 102, 153));
+        que_num_ex_pg.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        que_num_ex_pg.setForeground(new java.awt.Color(255, 255, 255));
+        que_num_ex_pg.setText("1.");
+        exam_page.add(que_num_ex_pg, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 70, 20));
+        exam_page.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, -1, -1));
+        exam_page.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 52, 130, 10));
+
+        ex_pg_ques.setBackground(new java.awt.Color(0, 102, 153));
+        ex_pg_ques.setColumns(20);
+        ex_pg_ques.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        ex_pg_ques.setForeground(new java.awt.Color(255, 255, 255));
+        ex_pg_ques.setRows(5);
+        jScrollPane3.setViewportView(ex_pg_ques);
+
+        exam_page.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 310, 120));
+
+        te_reg.setBackground(new java.awt.Color(0, 102, 153));
+        te_reg.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
+        te_reg.setPreferredSize(new java.awt.Dimension(500, 500));
+
+        tec_pass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tec_passActionPerformed(evt);
+            }
+        });
+
+        jLabel23.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel23.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel23.setText("Username");
+
+        jLabel27.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel27.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel27.setText("Password");
+
+        jButton15.setBackground(new java.awt.Color(0, 102, 153));
+        jButton15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton15.setForeground(new java.awt.Color(255, 255, 255));
+        jButton15.setText("Register");
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton15ActionPerformed(evt);
+            }
+        });
+
+        jLabel29.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel29.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel29.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel29.setText("REGISTRATION");
+
+        jButton14.setBackground(new java.awt.Color(0, 102, 153));
+        jButton14.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton14.setForeground(new java.awt.Color(255, 255, 255));
+        jButton14.setText("Back");
+        jButton14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton14ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout te_regLayout = new javax.swing.GroupLayout(te_reg);
+        te_reg.setLayout(te_regLayout);
+        te_regLayout.setHorizontalGroup(
+            te_regLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, te_regLayout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addGroup(te_regLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addGroup(te_regLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tec_name, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tec_pass, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(111, 111, 111))
+            .addGroup(te_regLayout.createSequentialGroup()
+                .addGroup(te_regLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(te_regLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(58, 58, 58)
+                        .addGroup(te_regLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(te_regLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jSeparator10, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                                .addComponent(jSeparator11))
+                            .addComponent(jSeparator12, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(te_regLayout.createSequentialGroup()
+                        .addGap(168, 168, 168)
+                        .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        te_regLayout.setVerticalGroup(
+            te_regLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(te_regLayout.createSequentialGroup()
+                .addGroup(te_regLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(te_regLayout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(te_regLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator12, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addGroup(te_regLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tec_name, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator10, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(te_regLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tec_pass, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
+                .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(64, 64, 64))
+        );
+
+        exam_finished.setBackground(new java.awt.Color(0, 102, 153));
+        exam_finished.setForeground(new java.awt.Color(255, 255, 255));
+        exam_finished.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
+        exam_finished.setMinimumSize(new java.awt.Dimension(500, 500));
+
+        pdf_button.setBackground(new java.awt.Color(0, 102, 153));
+        pdf_button.setForeground(new java.awt.Color(255, 255, 255));
+        pdf_button.setText("Generate PDF");
+        pdf_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pdf_buttonActionPerformed(evt);
+            }
+        });
+
+        jLabel24.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel24.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel24.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel24.setText("YOUR EXAM IS FINISHED!");
+
+        jLabel25.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel25.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel25.setText("OBTAINED MARKS:");
+
+        ob_marks.setBackground(new java.awt.Color(0, 102, 153));
+        ob_marks.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        ob_marks.setForeground(new java.awt.Color(255, 255, 255));
+        ob_marks.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        ob_marks.setText("0");
+
+        jLabel30.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel30.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel30.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel30.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel30.setText("TOTAL MARKS:");
+
+        total_marks.setBackground(new java.awt.Color(0, 102, 153));
+        total_marks.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        total_marks.setForeground(new java.awt.Color(255, 255, 255));
+        total_marks.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total_marks.setText("0");
+
+        jButton1.setBackground(new java.awt.Color(0, 102, 153));
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Main Page");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jSeparator7.setBackground(new java.awt.Color(0, 102, 153));
+        jSeparator7.setForeground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout exam_finishedLayout = new javax.swing.GroupLayout(exam_finished);
+        exam_finished.setLayout(exam_finishedLayout);
+        exam_finishedLayout.setHorizontalGroup(
+            exam_finishedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, exam_finishedLayout.createSequentialGroup()
+                .addContainerGap(200, Short.MAX_VALUE)
+                .addComponent(pdf_button, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(188, 188, 188))
+            .addGroup(exam_finishedLayout.createSequentialGroup()
+                .addGroup(exam_finishedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(exam_finishedLayout.createSequentialGroup()
+                        .addGroup(exam_finishedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(exam_finishedLayout.createSequentialGroup()
+                                .addGap(37, 37, 37)
+                                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(exam_finishedLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(exam_finishedLayout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(exam_finishedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(total_marks, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ob_marks, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(exam_finishedLayout.createSequentialGroup()
+                        .addGap(93, 93, 93)
+                        .addGroup(exam_finishedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                            .addComponent(jSeparator7)))
+                    .addGroup(exam_finishedLayout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addComponent(jSeparator8, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(exam_finishedLayout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        exam_finishedLayout.setVerticalGroup(
+            exam_finishedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, exam_finishedLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addGroup(exam_finishedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ob_marks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(2, 2, 2)
+                .addComponent(jSeparator8, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(exam_finishedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(total_marks, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
+                .addComponent(pdf_button, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Stdnt_sub, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Te_log, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(set_exam, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ExamAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(set_que, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Mark_sheet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(exam_strt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(exam_page, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(te_reg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(exam_finished, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Stdnt_sub, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Te_log, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(set_exam, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ExamAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(set_que, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Mark_sheet, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(exam_strt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(exam_page, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(te_reg, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(exam_finished, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
@@ -838,149 +1124,634 @@ public class first extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        jPanel1.setVisible(false);
-        jPanel2.setVisible(true);
-        jPanel3.setVisible(false);
+        Stdnt_sub.setVisible(false);
+        Te_log.setVisible(true);
+        set_exam.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        jPanel2.setVisible(false);
-        jPanel1.setVisible(true);
-        jPanel3.setVisible(false);
+        Te_log.setVisible(false);
+        Stdnt_sub.setVisible(true);
+        set_exam.setVisible(false);
+        log_name.setText(null);
+        log_pass.setText(null);
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void lgin_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lgin_btnActionPerformed
         // TODO add your handling code here:
-        jPanel2.setVisible(false);
-        jPanel3.setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+        if (log_name.getText().equals("")|| log_pass.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "please insert data!");
+        }
+        else {
+            try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost/sazid", "root", "");
+            pst=con.prepareStatement("select * from teacher_info where name =? ");
+            
+            pst.setString(1, log_name.getText());
+            
+            rs=pst.executeQuery();
+            if(rs.next()){
+                 String str=rs.getString("pass");
+                 if(log_pass.getText().equals(str)){
+                        Te_log.setVisible(false);
+                        set_exam.setVisible(true);
+                        curIns=log_name.getText();
+
+                        try{
+                            Connection con=getconnection1();
+                            String sql="select name,Time,Marks from exam where Instructor =? ";
+                            pst=con.prepareStatement(sql);
+                            pst.setString(1, log_name.getText());
+                            rs=pst.executeQuery();
+                            exam_table.setModel(DbUtils.resultSetToTableModel(rs));
+
+                        }
+                        catch(Exception ex){
+                            JOptionPane.showMessageDialog(null, "Add You first exam!");
+                        }
+                 }
+                 else{
+                     JOptionPane.showMessageDialog(null, "Invalid Username or Password!");
+                 }
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Invalid Username or Password!");
+            }
+            
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+        
+    }//GEN-LAST:event_lgin_btnActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
-        jPanel4.setVisible(false);
-        jPanel3.setVisible(true);
+        ExamAdd.setVisible(false);
+        set_exam.setVisible(true);
     }//GEN-LAST:event_jButton8ActionPerformed
-
-    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton5ActionPerformed
-
-    private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton6ActionPerformed
-
-    private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton7ActionPerformed
-
-    private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton8ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-        jPanel4.setVisible(false);
-        jPanel6.setVisible(true);
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost/sazid", "root", "");
+            pst=con.prepareStatement("select * from exam where name =? ");
+            
+            pst.setString(1,Exam_name.getText());
+            
+            rs=pst.executeQuery();
+            if(rs.next()){
+                 JOptionPane.showMessageDialog(null, "Exam is being taken by another Instructor ,please choose another exam name!");
+            }
+            else{
+                ExamAdd.setVisible(false);
+                set_que.setVisible(true);
+                ex = new exam_dtl(Exam_name.getText(), Ins.getText(),curIns);
+                try {
+                Connection con = getconnection1();
+                java.sql.PreparedStatement ps = con.prepareStatement("INSERT INTO exam(name,Instruction,Instructor,Time,Marks)" + "values(?,?,?,?,?)");
+                ps.setString(1, Exam_name.getText());
+                ps.setString(2, Ins.getText());
+                ps.setString(3, curIns);
+                ps.setString(4, time.getText());
+                ps.setString(5, marks.getText());
+                ps.executeUpdate();
+
+                JOptionPane.showMessageDialog(null, "Data Inserted");
+
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+
+            }
+            
+        } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         // TODO add your handling code here:
-        jPanel6.setVisible(false);
-        jPanel3.setVisible(true);
-    }//GEN-LAST:event_jButton11ActionPerformed
+        set_que.setVisible(false);
+        set_exam.setVisible(true);
+            ques e = new ques(Ques_name.getText(), frst.getText(), scnd.getText(), thrd.getText(), frth.getText(), Cor.getText(),ex.exm_nme);
+            ex.op.add(e);
+            try {
+                Connection con = getconnection1();
+                java.sql.PreparedStatement ps = con.prepareStatement("INSERT INTO que_tbl_1(QUES,OP1,OP2,OP3,OP4,CORRECT_ANS,EXAM_ID,QUES_NUM)" + "values(?,?,?,?,?,?,?,?)");
+                ps.setString(1, Ques_name.getText());
+                ps.setString(2, frst.getText());
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
-        jPanel3.setVisible(false);
-        jPanel2.setVisible(true);
-    }//GEN-LAST:event_jButton9ActionPerformed
+                ps.setString(3, scnd.getText());
+                ps.setString(4, thrd.getText());
+                ps.setString(5, frth.getText());
+                ps.setString(6, Cor.getText());
+                ps.setString(7, ex.exm_nme);
+                ps.setString(8, que_num.getText());
+
+                ps.executeUpdate();
+
+                JOptionPane.showMessageDialog(null, "Question Added!");
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+            frst.setText(null);
+            scnd.setText(null);
+            thrd.setText(null);
+            frth.setText(null);
+            Cor.setText(null);
+            Ques_name.setText("Question?");
+            que_num.setText(1+".");
+
+    }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
-        jPanel4.setVisible(true);
-        jPanel3.setVisible(false);
+        ExamAdd.setVisible(true);
+        set_exam.setVisible(false);
+        Exam_name.setText(null);
+        Ins.setText(null);
+
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        jPanel3.setVisible(false);
-        jPanel2.setVisible(true);
+        set_exam.setVisible(false);
+        Te_log.setVisible(true);
+        tec_name.setText("");
+        tec_pass.setText("");
+        log_name.setText("");
+        log_pass.setText("");
     }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         // TODO add your handling code here:
-        jPanel3.setVisible(false);
-        jPanel5.setVisible(true);
+        set_exam.setVisible(false);
+        Mark_sheet.setVisible(true);
+        
+        try{
+            Connection con=getconnection1();
+            String sql="select name,roll,marks from student_info where exam_name =? ";
+            pst=con.prepareStatement(sql);
+            pst.setString(1, search_exam.getText());
+            rs=pst.executeQuery();
+            marks_table.setModel(DbUtils.resultSetToTableModel(rs));
+            
+        }
+        catch(Exception ex){
+            JOptionPane.showMessageDialog(null, "Invalid Exam!");
+        }
     }//GEN-LAST:event_jButton12ActionPerformed
 
-    private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
+    private void Submit_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Submit_buttonActionPerformed
         // TODO add your handling code here:
-        jPanel3.setVisible(false);
-        jPanel5.setVisible(true);
-    }//GEN-LAST:event_jButton17ActionPerformed
+        
+        if(st_name.getText().equals("") || st_roll.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Student information missing!");
+        }
+        else if(Ex_nm.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Exam name missing!");
+        }
+        else{
+            try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost/sazid", "root", "");
+            pst=con.prepareStatement("select * from student_info where roll =? ");
+            
+            pst.setString(1, st_roll.getText());
+            
+            rs=pst.executeQuery();
+            if(rs.next()){
+                 JOptionPane.showMessageDialog(null,"Exam is already given by the student!");
+            }
+            else{
+                try {
+                    con = DriverManager.getConnection("jdbc:mysql://localhost/sazid", "root", "");
+                    pst=con.prepareStatement("select * from exam where name =? ");
 
-    private void jButton22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton22ActionPerformed
-        // TODO add your handling code here:
-        jPanel3.setVisible(false);
-        jPanel5.setVisible(true);
-    }//GEN-LAST:event_jButton22ActionPerformed
+                    pst.setString(1, Ex_nm.getText());
 
-    private void jButton27ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton27ActionPerformed
-        // TODO add your handling code here:
-        jPanel3.setVisible(false);
-        jPanel5.setVisible(true);
-    }//GEN-LAST:event_jButton27ActionPerformed
+                    rs=pst.executeQuery();
+                    if(rs.next()){
+                         Stdnt_sub.setVisible(false);
+                         exam_strt.setVisible(true);
+                         instr =rs.getString("Instruction"); 
+                         Instr_area.setText(instr);
+                         E_NAM.setText(Ex_nm.getText());
+                         instr =rs.getString("Time"); 
+                         t_time.setText(instr);
+                         instr =rs.getString("Marks"); 
+                         t_marks.setText(instr);
 
-    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
-        // TODO add your handling code here:
-        jPanel3.setVisible(false);
-        jPanel4.setVisible(true);
-    }//GEN-LAST:event_jButton14ActionPerformed
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null,"Invalid Exam Name!");
+                    }
 
-    private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
-        // TODO add your handling code here:
-        jPanel3.setVisible(false);
-        jPanel4.setVisible(true);
-    }//GEN-LAST:event_jButton19ActionPerformed
-
-    private void jButton24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton24ActionPerformed
-        // TODO add your handling code here:
-        jPanel3.setVisible(false);
-        jPanel4.setVisible(true);
-    }//GEN-LAST:event_jButton24ActionPerformed
-
-    private void jButton29ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton29ActionPerformed
-        // TODO add your handling code here:
-        jPanel3.setVisible(false);
-        jPanel4.setVisible(true);
-    }//GEN-LAST:event_jButton29ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        jPanel1.setVisible(false);
-        jPanel7.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton32ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton32ActionPerformed
-        // TODO add your handling code here:
-        jPanel7.setVisible(false);
-        jPanel8.setVisible(true);
-    }//GEN-LAST:event_jButton32ActionPerformed
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, e);
+                    }
+                
+            }
+            
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+            
+        }
+    }//GEN-LAST:event_Submit_buttonActionPerformed
 
     private void jButton34ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton34ActionPerformed
         // TODO add your handling code here:
-        jPanel5.setVisible(false);
-        jPanel3.setVisible(true);
+        Mark_sheet.setVisible(false);
+        set_exam.setVisible(true);
     }//GEN-LAST:event_jButton34ActionPerformed
 
-    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
+    private void op4_radioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_op4_radioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton4ActionPerformed
+    }//GEN-LAST:event_op4_radioActionPerformed
+
+    private void op3_radioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_op3_radioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_op3_radioActionPerformed
+
+    private void tec_passActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tec_passActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tec_passActionPerformed
+
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
+        // TODO add your handling code here:
+        if (tec_name.getText().equals("")|| tec_pass.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "please insert data!");
+        }
+        else {
+            try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost/sazid", "root", "");
+            pst=con.prepareStatement("select * from teacher_info where name =? ");
+            
+            pst.setString(1, tec_name.getText());
+            
+            rs=pst.executeQuery();
+            if(rs.next()){
+                 JOptionPane.showMessageDialog(null, "Username Taken!");
+            }
+            else{
+                te_reg.setVisible(false);
+                Te_log.setVisible(true);
+                try {
+                Connection con = getconnection1();
+                java.sql.PreparedStatement ps = con.prepareStatement("INSERT INTO teacher_info(name,pass)" + "values(?,?)");
+                ps.setString(1, tec_name.getText());
+                ps.setString(2, tec_pass.getText());
+
+                ps.executeUpdate();
+
+                JOptionPane.showMessageDialog(null, "User Registered");
+
+                }
+                catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+            }
+            
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+        tec_name.setText("");
+        tec_pass.setText("");
+    }//GEN-LAST:event_jButton15ActionPerformed
+
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        // TODO add your handling code here:
+        Te_log.setVisible(false);
+        te_reg.setVisible(true);
+        tec_name.setText("");
+        tec_pass.setText("");
+        log_name.setText("");
+        log_pass.setText("");
+
+    }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void thrdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thrdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_thrdActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        // TODO add your handling code here:
+
+                ques e = new ques(Ques_name.getText(), frst.getText(), scnd.getText(), thrd.getText(), frth.getText(), Cor.getText(),ex.exm_nme);
+                ex.op.add(e);
+                try {
+                    Connection con = getconnection1();
+                    java.sql.PreparedStatement ps = con.prepareStatement("INSERT INTO que_tbl_1(QUES,OP1,OP2,OP3,OP4,CORRECT_ANS,EXAM_ID,QUES_NUM)" + "values(?,?,?,?,?,?,?,?)");
+                    ps.setString(1, Ques_name.getText());
+                    ps.setString(2, frst.getText());
+
+                    ps.setString(3, scnd.getText());
+                    ps.setString(4, thrd.getText());
+                    ps.setString(5, frth.getText());
+                    ps.setString(6, Cor.getText());
+                    ps.setString(7, ex.exm_nme);
+                    ps.setString(8, que_num.getText());
+
+                    ps.executeUpdate();
+
+                    JOptionPane.showMessageDialog(null, "Question Added!");
+
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+                frst.setText(null);
+                scnd.setText(null);
+                thrd.setText(null);
+                frth.setText(null);
+                Cor.setText(null);
+                Ques_name.setText(".Question?");
+                que_num.setText(ex.op.size()+1+".");
+                if(ex.op.size()==Integer.decode(marks.getText())){
+                       set_que.setVisible(false);
+                       set_exam.setVisible(true);
+                       frst.setText(null);
+                       scnd.setText(null);
+                       thrd.setText(null);
+                       frth.setText(null);
+                       Cor.setText(null);
+                       Ques_name.setText("Question?");
+                       que_num.setText(1+".");
+                       ex.op.clear();
+                        try{
+                            Connection con=getconnection1();
+                            String sql="select name,Time,Marks from exam where Instructor =? ";
+                            pst=con.prepareStatement(sql);
+                            pst.setString(1, log_name.getText());
+                            rs=pst.executeQuery();
+                            exam_table.setModel(DbUtils.resultSetToTableModel(rs));
+
+                        }
+                        catch(Exception ex){
+                            JOptionPane.showMessageDialog(null, "Add You first exam!");
+                        }
+                }
+                
+       
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+        // TODO add your handling code here:
+        Te_log.setVisible(true);
+        te_reg.setVisible(false);
+        tec_name.setText("");
+        tec_pass.setText("");
+        log_name.setText("");
+        log_pass.setText("");
+    }//GEN-LAST:event_jButton14ActionPerformed
+
+    private void que_numActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_que_numActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_que_numActionPerformed
+
+    private void frstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frstActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_frstActionPerformed
+
+    
+    private void Next_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Next_buttonActionPerformed
+        // TODO add your handling code here:
+            if(op1_radio.isSelected()){
+                     if(op1_radio.getText().equals(instr)){
+                        cur_marks=cur_marks+1;
+                     }
+                pdf ans=new pdf();
+                ans.ques=ex_pg_ques.getText();
+                ans.corans=instr;
+                ans.givans=op1_radio.getText();
+                pdf1.add(ans);
+            }
+            else if(op2_radio.isSelected()){
+                     if(op2_radio.getText().equals(instr)){
+                        cur_marks=cur_marks+1;
+                     }
+                   pdf ans=new pdf();
+                   ans.ques=ex_pg_ques.getText();
+                   ans.corans=instr;
+                   ans.givans=op2_radio.getText();
+                   pdf1.add(ans);
+            }
+            else if(op3_radio.isSelected()){
+                     if(op3_radio.getText().equals(instr)){
+                        cur_marks=cur_marks+1;
+                     }
+                     pdf ans=new pdf();
+                    ans.ques=ex_pg_ques.getText();
+                    ans.corans=instr;
+                    ans.givans=op3_radio.getText();
+                    pdf1.add(ans);
+           }
+           else if(op4_radio.isSelected()){
+                     if(op4_radio.getText().equals(instr)){
+                        cur_marks=cur_marks+1;
+                     }
+                    pdf ans=new pdf();
+                    ans.ques=ex_pg_ques.getText();
+                    ans.corans=instr;
+                    ans.givans=op4_radio.getText();
+                    pdf1.add(ans);
+            }
+            instr=null;
+            op1_radio.setSelected(false);
+            op2_radio.setSelected(false);
+            op3_radio.setSelected(false);
+            op4_radio.setSelected(false);
+            que_pg_num++;
+            que_num_ex_pg.setText(que_pg_num+".");
+            try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost/sazid", "root", "");
+            pst=con.prepareStatement("select * from que_tbl_1 where EXAM_ID =? and QUES_NUM =?");
+            
+            
+            pst.setString(1, Ex_nm.getText());
+            pst.setString(2, que_num_ex_pg.getText());
+            
+            rs=pst.executeQuery();
+            if(rs.next()){
+                 exam_strt.setVisible(false);
+                 exam_page.setVisible(true);
+                 instr =rs.getString("QUES"); 
+                 ex_pg_ques.setText(instr);
+                 instr =rs.getString("OP1"); 
+                 op1_radio.setText(instr);
+                 instr =rs.getString("OP2"); 
+                 op2_radio.setText(instr);
+                 instr =rs.getString("OP3"); 
+                 op3_radio.setText(instr);
+                 instr =rs.getString("OP4"); 
+                 op4_radio.setText(instr);
+                 instr =rs.getString("CORRECT_ANS"); 
+                 //JOptionPane.showMessageDialog(null, instr);
+            }
+            else{
+                exam_page.setVisible(false);
+                exam_finished.setVisible(true);
+                ob_marks.setText(cur_marks+"");
+                total_marks.setText(que_pg_num-1+"");
+                try {
+                    Connection con = getconnection1();
+                    java.sql.PreparedStatement ps = con.prepareStatement("INSERT INTO student_info(name,roll,marks,exam_name)" + "values(?,?,?,?)");
+                    ps.setString(1, st_name.getText());
+                    ps.setString(2, st_roll.getText());
+
+                    ps.setString(3, cur_marks+"");
+                    ps.setString(4, Ex_nm.getText());
+                    ps.executeUpdate();
+
+                    //JOptionPane.showMessageDialog(null, "Data Inserted");
+
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+                
+                cur_marks=0;
+                ques_num = 0;
+                que_pg_num=1;
+                op1_radio.setSelected(false);
+                op2_radio.setSelected(false);
+                op3_radio.setSelected(false);
+                op4_radio.setSelected(false);
+                t.stop();
+                JOptionPane.showMessageDialog(null,"Exam Finished");
+                
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_Next_buttonActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        exam_finished.setVisible(false);
+        Stdnt_sub.setVisible(true);
+        st_name.setText("");
+        st_roll.setText("");
+        Ex_nm.setText("");
+    }//GEN-LAST:event_jButton1ActionPerformed
+    
+    private void jButton32ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton32ActionPerformed
+        // TODO add your handling code here:
+        
+        
+        pdf1.clear();
+        que_pg_num=1;
+        que_num_ex_pg.setText(que_pg_num+".");
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost/sazid", "root", "");
+            pst=con.prepareStatement("select * from que_tbl_1 where EXAM_ID =? and QUES_NUM =?");
+
+            pst.setString(1, Ex_nm.getText());
+            pst.setString(2, que_num_ex_pg.getText());
+
+            rs=pst.executeQuery();
+            if(rs.next()){
+                exam_strt.setVisible(false);
+                exam_page.setVisible(true);
+                instr =rs.getString("QUES");
+                ex_pg_ques.setText(instr);
+                instr =rs.getString("OP1");
+                op1_radio.setText(instr);
+                instr =rs.getString("OP2");
+                op2_radio.setText(instr);
+                instr =rs.getString("OP3");
+                op3_radio.setText(instr);
+                instr =rs.getString("OP4");
+                op4_radio.setText(instr);
+                instr =rs.getString("CORRECT_ANS");
+                op1_radio.setSelected(false);
+                op2_radio.setSelected(false);
+                op3_radio.setSelected(false);
+                op4_radio.setSelected(false);
+                min=Integer.decode(t_time.getText())-1;
+                sec=60;
+                t=new Timer(1000,new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        sec--;
+                        if(sec<10){
+                             Timer_.setText(min+":0"+sec);
+                        }
+                        else Timer_.setText(min+":"+sec);
+                        if(sec==0){
+                            sec=60;
+                            min=min-1;
+                            if(min<0){
+                                t.stop();
+                                exam_page.setVisible(false);
+                                exam_finished.setVisible(true);
+                                ob_marks.setText(cur_marks+"");
+                                total_marks.setText(t_marks.getText());
+                                try {
+                                    Connection con = getconnection1();
+                                    java.sql.PreparedStatement ps = con.prepareStatement("INSERT INTO student_info(name,roll,marks,exam_name)" + "values(?,?,?,?)");
+                                    ps.setString(1, st_name.getText());
+                                    ps.setString(2, st_roll.getText());
+
+                                    ps.setString(3, cur_marks+"");
+                                    ps.setString(4, Ex_nm.getText());
+                                    ps.executeUpdate();
+
+                                    
+
+                                } catch (SQLException ex) {
+                                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                                }
+
+                                cur_marks=0;
+                                ques_num = 0;
+                                que_pg_num=1;
+                                op1_radio.setSelected(false);
+                                op2_radio.setSelected(false);
+                                op3_radio.setSelected(false);
+                                op4_radio.setSelected(false);
+                                JOptionPane.showMessageDialog(null,"Exam Finished");
+                                
+                            }
+                        }
+                    }
+               
+                });
+                t.start();
+                
+
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"Invalid Exam Name!");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_jButton32ActionPerformed
+
+    private void pdf_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pdf_buttonActionPerformed
+        try {
+            // TODO add your handling code here:
+            Document doc =new Document();
+            try {
+                PdfWriter.getInstance(doc, new FileOutputStream("Ans.pdf"));
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(first.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            doc.open();
+            for(int i=0;i<pdf1.size();i++){
+                doc.add(new Paragraph(i+1+". "+pdf1.get(i).ques+"\nCorrect ans: "+pdf1.get(i).corans +"\nGiven ans:"+ pdf1.get(i).givans+"\n\n"));
+            }
+            doc.close();
+        } catch (DocumentException ex) {
+            Logger.getLogger(first.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JOptionPane.showMessageDialog(null, "Your PDF is generated named as Ans.pdf!");
+    }//GEN-LAST:event_pdf_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1018,6 +1789,29 @@ public class first extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField Cor;
+    private javax.swing.JLabel E_NAM;
+    private javax.swing.JTextField Ex_nm;
+    private javax.swing.JPanel ExamAdd;
+    private javax.swing.JTextField Exam_name;
+    private javax.swing.JTextArea Ins;
+    private javax.swing.JTextArea Instr_area;
+    private javax.swing.JPanel Mark_sheet;
+    private javax.swing.JButton Next_button;
+    private javax.swing.JTextArea Ques_name;
+    private javax.swing.JPanel Stdnt_sub;
+    private javax.swing.JButton Submit_button;
+    private javax.swing.JPanel Te_log;
+    private javax.swing.JLabel Time;
+    private javax.swing.JLabel Time1;
+    private javax.swing.JLabel Timer_;
+    private javax.swing.JTextArea ex_pg_ques;
+    private javax.swing.JPanel exam_finished;
+    private javax.swing.JPanel exam_page;
+    private javax.swing.JPanel exam_strt;
+    private javax.swing.JTable exam_table;
+    private javax.swing.JTextField frst;
+    private javax.swing.JTextField frth;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
@@ -1025,33 +1819,14 @@ public class first extends javax.swing.JFrame {
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton16;
-    private javax.swing.JButton jButton17;
-    private javax.swing.JButton jButton18;
-    private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton20;
-    private javax.swing.JButton jButton21;
-    private javax.swing.JButton jButton22;
-    private javax.swing.JButton jButton23;
-    private javax.swing.JButton jButton24;
-    private javax.swing.JButton jButton25;
-    private javax.swing.JButton jButton26;
-    private javax.swing.JButton jButton27;
-    private javax.swing.JButton jButton28;
-    private javax.swing.JButton jButton29;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton30;
-    private javax.swing.JButton jButton31;
     private javax.swing.JButton jButton32;
-    private javax.swing.JButton jButton33;
     private javax.swing.JButton jButton34;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1065,64 +1840,76 @@ public class first extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
-    private javax.swing.JRadioButton jRadioButton5;
-    private javax.swing.JRadioButton jRadioButton6;
-    private javax.swing.JRadioButton jRadioButton7;
-    private javax.swing.JRadioButton jRadioButton8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextArea jTextArea4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField15;
-    private javax.swing.JTextField jTextField16;
-    private javax.swing.JTextField jTextField17;
-    private javax.swing.JTextField jTextField18;
-    private javax.swing.JTextField jTextField19;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator10;
+    private javax.swing.JSeparator jSeparator11;
+    private javax.swing.JSeparator jSeparator12;
+    private javax.swing.JSeparator jSeparator13;
+    private javax.swing.JSeparator jSeparator14;
+    private javax.swing.JSeparator jSeparator15;
+    private javax.swing.JSeparator jSeparator16;
+    private javax.swing.JSeparator jSeparator17;
+    private javax.swing.JSeparator jSeparator18;
+    private javax.swing.JSeparator jSeparator19;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator20;
+    private javax.swing.JSeparator jSeparator21;
+    private javax.swing.JSeparator jSeparator22;
+    private javax.swing.JSeparator jSeparator23;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JSeparator jSeparator9;
+    private javax.swing.JButton lgin_btn;
+    private javax.swing.JTextField log_name;
+    private javax.swing.JPasswordField log_pass;
+    private javax.swing.JTextField marks;
+    private javax.swing.JTable marks_table;
+    private javax.swing.JLabel ob_marks;
+    private javax.swing.JRadioButton op1_radio;
+    private javax.swing.JRadioButton op2_radio;
+    private javax.swing.JRadioButton op3_radio;
+    private javax.swing.JRadioButton op4_radio;
+    private javax.swing.JButton pdf_button;
+    private javax.swing.JTextField que_num;
+    private javax.swing.JLabel que_num_ex_pg;
+    private javax.swing.JTextField scnd;
+    private javax.swing.JTextField search_exam;
+    private javax.swing.JPanel set_exam;
+    private javax.swing.JPanel set_que;
+    private javax.swing.JTextField st_name;
+    private javax.swing.JTextField st_roll;
+    private javax.swing.JLabel t_marks;
+    private javax.swing.JLabel t_time;
+    private javax.swing.JPanel te_reg;
+    private javax.swing.JTextField tec_name;
+    private javax.swing.JTextField tec_pass;
+    private javax.swing.JTextField thrd;
+    private javax.swing.JTextField time;
+    private javax.swing.JLabel total_marks;
     // End of variables declaration//GEN-END:variables
 }
